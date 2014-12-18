@@ -1,0 +1,20 @@
+prefix=/home/denis/mysql/
+exec_prefix=/home/denis/mysql/
+bindir=/home/denis/mysql//bin
+sbindir=/home/denis/mysql//sbin
+libdir=/home/denis/mysql//lib
+includedir=/home/denis/mysql//include
+datarootdir=/home/denis/mysql//share
+datadir=/home/denis/mysql//share
+document_root=/usr/local/mysql/share/groonga/html/admin
+pluginsdir=/home/denis/mysql//lib/groonga/plugins
+groonga=${bindir}/groonga
+groonga_httpd=${sbindir}/groonga-httpd
+groonga_suggest_create_dataset=${bindir}/groonga-suggest-create-dataset
+groonga_version=4.0.6
+
+Name: Groonga
+Description: An Embeddable Fulltext Search Engine
+Version: 4.0.6
+Libs: -L${libdir} -lgroonga
+Cflags: -I${includedir}/groonga

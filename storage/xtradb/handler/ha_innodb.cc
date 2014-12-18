@@ -1395,6 +1395,7 @@ Creates an InnoDB transaction struct for the thd if it does not yet have one.
 Starts a new InnoDB transaction if a transaction is not yet started. And
 clones snapshot for a consistent read from another session, if it has one.
 @return	0 */
+#ifdef NOT_USED
 static
 int
 innobase_start_trx_and_clone_read_view(
@@ -1406,6 +1407,7 @@ innobase_start_trx_and_clone_read_view(
 	THD*		from_thd);	/* in: MySQL thread handle of the
 					user session from which the consistent
 					read should be cloned */
+#endif
 /****************************************************************//**
 Flushes InnoDB logs to disk and makes a checkpoint. Really, a commit flushes
 the logs, and the name of this function should be innobase_checkpoint.
@@ -4454,6 +4456,7 @@ Creates an InnoDB transaction struct for the thd if it does not yet have one.
 Starts a new InnoDB transaction if a transaction is not yet started. And
 clones snapshot for a consistent read from another session, if it has one.
 @return	0 */
+#ifdef NOT_USED
 static
 int
 innobase_start_trx_and_clone_read_view(
@@ -4544,6 +4547,7 @@ innobase_start_trx_and_clone_read_view(
 
 	DBUG_RETURN(0);
 }
+#endif
 
 /*****************************************************************//**
 Commits a transaction in an InnoDB database or marks an SQL statement
@@ -11977,7 +11981,7 @@ ha_innobase::check_table_options(
 			return "PAGE_ENCRYPTION_KEY";
 		}
 
-		if (!KeySingleton::getInstance().isAvailable() || KeySingleton::getInstance().getKeys(options->page_encryption_key)==NULL) {
+		if (KeySingleton::getInstance().getKeys(options->page_encryption_key)==NULL) {
 			push_warning_printf(
 				thd, Sql_condition::WARN_LEVEL_WARN,
 				HA_WRONG_CREATE_OPTION,

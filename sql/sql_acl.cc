@@ -2650,7 +2650,6 @@ bool change_password(THD *thd, const char *host, const char *user,
   uint new_password_len= (uint) strlen(new_password);
   int result=0;
   const CSET_STRING query_save __attribute__((unused)) = thd->query_string;
-
   DBUG_ENTER("change_password");
   DBUG_PRINT("enter",("host: '%s'  user: '%s'  new_password: '%s'",
 		      host,user,new_password));
@@ -2658,6 +2657,15 @@ bool change_password(THD *thd, const char *host, const char *user,
 
   if (check_change_password(thd, host, user, new_password, new_password_len))
     DBUG_RETURN(1);
+
+  /*
+    This statement will be replicated as a statement, even when using
+    row-based replication.  The flag will be reset at the end of the
+    statement.
+    This has to be handled here as it's called by set_var.cc, which is
+    not automaticly handled by sql_parse.cc
+  */
+  save_binlog_format= thd->set_current_stmt_binlog_format_stmt();
 
   if (mysql_bin_log.is_open() ||
       (WSREP(thd) && !IF_WSREP(thd->wsrep_applier, 0)))
@@ -2676,15 +2684,6 @@ bool change_password(THD *thd, const char *host, const char *user,
     DBUG_RETURN(result != 1);
 
   result= 1;
-
-  /*
-    This statement will be replicated as a statement, even when using
-    row-based replication.  The flag will be reset at the end of the
-    statement.
-    This has to be handled here as it's called by set_var.cc, which is
-    not automaticly handled by sql_parse.cc
-  */
-  save_binlog_format= thd->set_current_stmt_binlog_format_stmt();
 
   mysql_mutex_lock(&acl_cache->lock);
   ACL_USER *acl_user;
@@ -2731,7 +2730,7 @@ end:
   close_mysql_tables(thd);
 
 #ifdef WITH_WSREP
-error: // this label is used in WSREP_TO_ISOLATION_END
+error: // this label is used in WSREP_TO_ISOLATION_BEGIN
   if (WSREP(thd) && !thd->wsrep_applier)
   {
     WSREP_TO_ISOLATION_END;

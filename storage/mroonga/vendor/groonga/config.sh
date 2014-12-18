@@ -1,0 +1,6 @@
+export CUTTER=""
+export RUBY="ruby"
+export GROONGA="/home/denis/Workspaces/10.1-encryption/storage/mroonga/vendor/groonga/src/groonga"
+export GROONGA_HTTPD=""
+export GROONGA_SUGGEST_CREATE_DATASET="/home/denis/Workspaces/10.1-encryption/storage/mroonga/vendor/groonga/src/suggest/groonga-suggest-create-dataset"
+export GROONGA_BENCHMARK="/home/denis/Workspaces/10.1-encryption/storage/mroonga/vendor/groonga/src/groonga-benchmark"
